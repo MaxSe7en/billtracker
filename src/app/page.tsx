@@ -1,102 +1,109 @@
-import Image from "next/image";
+"use client";
+import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import Link from "next/link";
+import usAlbers from "@/utils/states-10m.json";
+
+// Mock state data (replace with API fetch)
+const states = [
+  { id: "CA", name: "California", bills: 45 },
+  { id: "TX", name: "Texas", bills: 30 },
+  // Add all states...
+];
+
+const geoUrl = usAlbers;
+
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-background text-foreground dark:bg-darkBackground">
+      {/* Header */}
+      <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4 border-b border-neutral-200 dark:border-neutral-800">
+        <h1 className="text-2xl font-bold text-primary">BillTracker</h1>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        <input
+          type="text"
+          placeholder="Search bills, posts..."
+          className="p-2 rounded border border-neutral-300 dark:border-neutral-700 bg-background dark:bg-darkBackground text-foreground w-full md:w-64"
+        />
+
+        <select className="p-2 rounded border border-neutral-300 dark:border-neutral-700 bg-background dark:bg-darkBackground text-foreground w-full md:w-auto">
+          <option value="federal">Federal</option>
+          {states.map((state) => (
+            <option key={state.id} value={state.id}>
+              {state.name}
+            </option>
+          ))}
+        </select>
+
+        <div className="flex gap-2">
+          <button className="p-2 rounded bg-primary text-white">Profile</button>
+          <button className="p-2 rounded bg-accent text-white">🌙</button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </header>
+
+      {/* Hero: Interactive Map */}
+      <section className="p-4">
+        <h2 className="text-lg font-semibold mb-4 text-foreground">
+          Select a State
+        </h2>
+        <div className="w-full max-w-4xl mx-auto">
+          <ComposableMap
+            projection="geoAlbersUsa"
+            className="w-full h-auto"
+          >
+            <Geographies geography={geoUrl}   className="
+    fill-map hover:fill-map-hover
+    cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent
+  "
+  tabIndex={0}>
+              {({ geographies }) =>
+                geographies.map((geo) => (
+                  <Link
+                    key={geo.rsmKey}
+                    href={`/state/${geo.properties.postal}`}
+                  >
+                    <Geography
+                      geography={geo}
+                      className="fill-primary hover:fill-accent focus:outline-none focus:ring-2 focus:ring-accent cursor-pointer"
+                      tabIndex={0}
+                    />
+                  </Link>
+                ))
+              }
+            </Geographies>
+          </ComposableMap>
+        </div>
+      </section>
+
+      {/* Featured Content */}
+      <section className="p-4 grid gap-4">
+        <div>
+          <h2 className="text-lg font-semibold mb-2 text-foreground">
+            Federal Bills
+          </h2>
+          <article className="p-4 rounded-lg shadow bg-card dark:bg-darkCard text-foreground">
+            <h3 className="font-semibold">HB123: Tax Reform</h3>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              Simplifies taxes...
+            </p>
+            <button
+              className="mt-2 p-2 rounded bg-accent text-white"
+              onClick={() =>
+                navigator.share({
+                  title: "HB123",
+                  text: "Simplifies taxes...",
+                  url: "/federal/bills/HB123",
+                })
+              }
+            >
+              Share
+            </button>
+          </article>
+        </div>
+      </section>
+
+      <footer className="p-4 border-t border-neutral-200 dark:border-neutral-800 text-foreground text-center">
+        <p>About | Privacy</p>
       </footer>
     </div>
   );
