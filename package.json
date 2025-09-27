@@ -11,6 +11,7 @@
   "dependencies": {
     "@fontsource/playfair-display": "^5.2.8",
     "@types/react-simple-maps": "^3.0.6",
+    "axios": "^1.12.2",
     "d3-scale": "^4.0.2",
     "framer-motion": "^12.23.16",
     "lucide-react": "^0.544.0",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/d3-scale": "^4.0.9",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
