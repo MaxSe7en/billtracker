@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import StateClient from "./StateClient";
+import BillList from "@/components/BillList";
 
 export async function generateMetadata({
   params,
 }: {
   params: { code: string };
 }): Promise<Metadata> {
-  const stateName = params.code.toUpperCase();
+  const p = await params
+  const stateName = p.code.toUpperCase();
 
   return {
     title: `${stateName} Bills & Community – BillTracker`,
@@ -19,5 +21,6 @@ export async function generateMetadata({
 }
 
 export default function StatePage({ params }: { params: { code: string } }) {
-  return <StateClient code={params.code} />;
+  return <BillList stateCode={params.code} />;
+  // <StateClient code={params.code} />;
 }
