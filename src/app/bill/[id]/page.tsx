@@ -27,6 +27,7 @@ async function fetchBill(id: string): Promise<Bill> {
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const bill = await fetchBill(params.id);
+  // console.log("Generating metadata for bill:", bill.bill_number);
   return {
     title: `${bill.bill_number} - ${bill.title} | BillTracker`,
     description: bill.ai_summary || bill.description,
